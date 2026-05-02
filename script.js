@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Hover effects
-        const interactables = document.querySelectorAll('a, .btn, .tech-tag, .service-card');
+        const interactables = document.querySelectorAll('a, .btn, .tech-tag, .service-card, .project-row');
         
         interactables.forEach(el => {
             el.addEventListener('mouseenter', () => {
@@ -219,5 +219,58 @@ document.addEventListener('DOMContentLoaded', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
+
+    // --- GitHub Navigation Animation ---
+    const projectRows = document.querySelectorAll('.project-row');
+    const githubRedirectSequence = [
+        "Initiating external link protocol...",
+        "Establishing secure tunnel to github.com...",
+        "Accessing harishankarjp07 repositories...",
+        "Transferring payload...",
+        "Redirecting..."
+    ];
+
+    projectRows.forEach(row => {
+        row.addEventListener('click', () => {
+            // Show loader
+            loader.style.display = "flex";
+            setTimeout(() => {
+                loader.style.opacity = "1";
+            }, 10);
+            
+            nav.classList.remove('fade-in-content');
+            main.classList.remove('fade-in-content');
+            
+            let redirectLine = 0;
+            loaderText.innerHTML = "";
+            
+            function typeRedirectLine() {
+                if (redirectLine < githubRedirectSequence.length) {
+                    let text = githubRedirectSequence[redirectLine];
+                    let charIndex = 0;
+                    loaderText.innerHTML = "";
+                    
+                    let typingInterval = setInterval(() => {
+                        if (charIndex < text.length) {
+                            loaderText.innerHTML += text.charAt(charIndex);
+                            charIndex++;
+                        } else {
+                            clearInterval(typingInterval);
+                            redirectLine++;
+                            setTimeout(typeRedirectLine, 300); // Wait before typing next line
+                        }
+                    }, 25); // Typing speed
+                } else {
+                    // Redirect sequence complete
+                    setTimeout(() => {
+                        window.location.href = "https://github.com/harishankarjp07";
+                    }, 400);
+                }
+            }
+            
+            // Start typing
+            setTimeout(typeRedirectLine, 500);
+        });
+    });
 
 });
