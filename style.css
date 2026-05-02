@@ -958,11 +958,13 @@ h1, h2, h3, h4 {
     background: var(--glass-bg);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 8px;
-    transition: border-color 0.3s;
+    transition: all 0.3s ease;
 }
 
 .project-row:hover {
-    border-color: var(--glass-border);
+    border-color: var(--accent);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(255, 101, 0, 0.1);
 }
 
 .project-info {
