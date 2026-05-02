@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 30); // Typing speed
         } else {
             // Boot sequence complete
+            sessionStorage.setItem('booted', 'true');
             setTimeout(() => {
                 loader.style.opacity = "0";
                 setTimeout(() => {
@@ -47,8 +48,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Start loader
-    setTimeout(typeLine, 500);
+    // Start loader if not already booted in this session
+    if (!sessionStorage.getItem('booted')) {
+        setTimeout(typeLine, 500);
+    } else {
+        loader.style.display = "none";
+        loader.style.opacity = "0";
+        nav.classList.remove('hidden-initially');
+        main.classList.remove('hidden-initially');
+        nav.classList.add('fade-in-content');
+        main.classList.add('fade-in-content');
+    }
+
+    // Handle bfcache (when user clicks 'back' button in browser)
+    window.addEventListener('pageshow', (event) => {
+        // Reset loader UI state just in case we are coming back from a link
+        if (sessionStorage.getItem('booted')) {
+            loader.style.display = "none";
+            loader.style.opacity = "0";
+            nav.classList.remove('hidden-initially');
+            main.classList.remove('hidden-initially');
+            nav.classList.add('fade-in-content');
+            main.classList.add('fade-in-content');
+        }
+    });
 
 
     // --- Canvas Coding Lines (Matrix Style) ---
@@ -232,6 +255,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     projectRows.forEach(row => {
         row.addEventListener('click', () => {
+            // Set hash so when coming back, it scrolls to works section without reloading
+            history.replaceState(null, null, '#works');
+            
             // Show loader
             loader.style.display = "flex";
             setTimeout(() => {
